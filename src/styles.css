@@ -1,0 +1,109 @@
+:root {
+  --brick-size: 20px;
+  --tens-brick-height: calc(var(--brick-size) * 10 / 1.5);
+  --color-unit-brick: red;
+  --color-tens-brick: green;
+  --color-hundreds-brick: DodgerBlue;
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Horizontal {
+  display: flex;
+}
+
+.Vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.Section {
+  margin: 10px;
+  padding: 10px;
+  border: 3px dashed lightgray;
+  border-radius: 3px;
+}
+
+.Ghost {
+  opacity: 0.6;
+}
+
+.Hide {
+  opacity: 0.03;
+}
+
+.HundredsBrick,
+.TensBrick,
+.UnitBrick,
+.TensGroup,
+.UnitsGroup {
+  border-radius: 3px;
+}
+
+.HundredsBrick,
+.TensBrick,
+.UnitBrick {
+  margin: 4px;
+  border: 3px solid black;
+}
+
+.TensGroup,
+.UnitsGroup {
+  border: 3px solid transparent;
+}
+
+.ResultNumber {
+  align-self: center;
+  color: green;
+  width: 3em;
+}
+
+.OverflowDigit {
+  color: red;
+  font-size: 60%;
+}
+
+.HiddenDigit {
+  color: transparent;
+}
+
+.UnitBrick {
+  width: var(--brick-size);
+  height: var(--brick-size);
+  background-color: var(--color-unit-brick);
+}
+
+.TensGroup {
+  --background-color: var(--color-hundreds-brick);
+  padding: var(--brick-size);
+}
+
+.UnitsGroup {
+  --background-color: var(--color-tens-brick);
+  padding: calc(var(--brick-size) / 2);
+}
+
+.Complete {
+  background-color: var(--background-color);
+  border-color: black;
+}
+
+.TensBrick {
+  margin: 4px;
+  width: var(--brick-size);
+  height: var(--tens-brick-height);
+  background-color: var(--color-tens-brick);
+}
+
+.HundredsBrick {
+  margin: 4px;
+  width: var(--tens-brick-height);
+  height: var(--tens-brick-height);
+  background-color: var(--color-hundreds-brick);
+}
