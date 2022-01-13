@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useDropTarget } from "./DragDrop/hooks/useDropTarget";
 
 import "./styles.css";
 
@@ -18,50 +19,38 @@ export const PlaceSection: React.FunctionComponent<PlaceSectionProps> = ({
   children
 }) => {
   const [isDragOver, setIsDragOver] = React.useState(false);
-  const refDiv = React.useRef<HTMLDivElement>(undefined);
 
-  const handleDragOver = React.useCallback(
-    (ev: React.DragEvent<HTMLDivElement>) => {
-      if (!isValidDropTarget) {
-        ev.dataTransfer.dropEffect = "none";
-      } else {
-        ev.dataTransfer.dropEffect = "move";
-        setIsDragOver(true);
-        if (!isDragOver) {
-          onDragEnter?.();
-        }
-      }
+  const handleDragOver = React.useCallback(() => {
+    setIsDragOver(true);
+    onDragEnter?.();
+  }, [onDragEnter]);
 
-      ev.preventDefault();
-    },
-    [isValidDropTarget, isDragOver, onDragEnter]
-  );
+  const handleDragLeave = React.useCallback(() => {
+    setIsDragOver(false);
+    onDragLeave?.();
+  }, [onDragLeave]);
 
-  const handleDragLeave = React.useCallback(
-    (ev: React.DragEvent<HTMLDivElement>) => {
-      if (ev.target === refDiv.current && isValidDropTarget) {
-        setIsDragOver(false);
-        onDragLeave?.();
-      }
-    },
-    [isValidDropTarget, onDragLeave]
-  );
+  const handleDrop = React.useCallback(() => {
+    setIsDragOver(false);
+    onDragDrop?.();
+  }, [onDragDrop]);
 
-  const handleDragDrop = React.useCallback(() => {
-    if (isValidDropTarget) {
-      setIsDragOver(false);
-      onDragDrop?.();
-    }
-  }, [isValidDropTarget, onDragDrop]);
+  const refElement = React.useRef<HTMLDivElement>(null);
+
+  const dropTargetEvents = useDropTarget({
+    refElement,
+    canDrop: isValidDropTarget,
+    onDropTargetEnter: handleDragOver,
+    onDropTargetLeave: handleDragLeave,
+    onDrop: handleDrop
+  });
 
   return (
     <div
-      ref={refDiv}
+      ref={refElement}
       className="Section"
       style={{ borderColor: isDragOver ? "black" : undefined }}
-      onDragOver={handleDragOver}
-      onDrop={handleDragDrop}
-      onDragLeave={handleDragLeave}
+      {...dropTargetEvents}
     >
       {children}
     </div>

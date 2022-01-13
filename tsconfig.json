@@ -3,6 +3,7 @@
         "./src/**/*"
     ],
     "compilerOptions": {
+        "target": "es2015",
         "strict": true,
         "esModuleInterop": true,
         "lib": [

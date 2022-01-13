@@ -1,5 +1,8 @@
 import * as React from "react";
 import { BrickProps } from "./Brick";
+import { Gripper } from "./Gripper";
+
+import { useDraggable } from "./DragDrop/hooks/useDraggable";
 
 export interface PlaceValueProps {
   value: number;
@@ -22,45 +25,37 @@ export function placeValuePictureFactory(
     onBeginDragItem,
     onEndDrag
   }) => {
-    const [isDraggingGroup, setIsDraggingGroup] = React.useState(false);
-
-    const handleDragStart = React.useCallback(
-      (ev: React.DragEvent<HTMLDivElement>) => {
-        onBeginDragGroup?.();
-        requestAnimationFrame(() => setIsDraggingGroup(true));
-        ev.stopPropagation();
-      },
-      [onBeginDragGroup]
-    );
-
-    const handleDragEnd = React.useCallback(() => {
-      setIsDraggingGroup(false);
-      onEndDrag?.();
-    }, [onEndDrag]);
-
     const isGroupComplete = value >= 10;
+
+    const { dragStyle, dragEvents } = useDraggable({
+      canDrag: isGroupComplete,
+      onBeginDrag: onBeginDragGroup,
+      onEndDrag
+    });
+
     return (
       <div className={outerClass}>
         <div
-          className={`${groupLayoutClass} ${groupContainerClass}${
+          className={`${groupContainerClass}${
             isGroupComplete ? " Complete" : ""
           }`}
-          style={{ visibility: isDraggingGroup ? "hidden" : undefined }}
-          draggable={isGroupComplete}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
+          style={dragStyle}
+          {...dragEvents}
         >
-          {Array.from({ length: 10 })
-            .map((_, i) => i + 1)
-            .map((i) => (
-              <ItemComponent
-                key={i}
-                hide={i > value + previewAdd}
-                ghost={i > value && i <= value + previewAdd}
-                onBeginDrag={onBeginDragItem}
-                onEndDrag={onEndDrag}
-              />
-            ))}
+          <div className={groupLayoutClass}>
+            {Array.from({ length: 10 })
+              .map((_, i) => i + 1)
+              .map((i) => (
+                <ItemComponent
+                  key={i}
+                  hide={i > value + previewAdd}
+                  ghost={i > value && i <= value + previewAdd}
+                  onBeginDrag={onBeginDragItem}
+                  onEndDrag={onEndDrag}
+                />
+              ))}
+          </div>
+          <Gripper enabled={isGroupComplete} />
         </div>
         <div className={`${groupLayoutClass} ${groupContainerClass}`}>
           {Array.from({ length: 10 })

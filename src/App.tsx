@@ -15,6 +15,9 @@ import {
 } from "./appModel";
 
 import { NumberRepresentation } from "./NumberRepresentation";
+import { usePointerTracker } from "./DragDrop/hooks/usePointerTracker";
+import { composePointerEventHandlers } from "./DragDrop/composePointerEventHandlers";
+import { usePointerEnterExitTracker } from "./DragDrop/hooks/usePointerEnterExitTracker";
 
 function addText({ lhs, rhs }: Question): string {
   return `Add ${rhs} (bottom number) to ${lhs} (top number) so that the top number becomes ${lhs} + ${rhs}.`;
@@ -37,12 +40,17 @@ export default function App() {
     generateInitialState
   );
 
+  const dragEvents = composePointerEventHandlers(
+    usePointerTracker(),
+    usePointerEnterExitTracker()
+  );
+
   const handleOnClick = React.useCallback(() => {
     dispatch(createActionRandomQuestion());
   }, []);
 
   return (
-    <div className="App">
+    <div className="App" {...dragEvents}>
       <h1>Place value</h1>
       <h2>{questionText(state.question)}</h2>
       <div style={{ position: "relative" }}>

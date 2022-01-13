@@ -12,6 +12,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  touch-action: none;
 }
 
 .Horizontal {
@@ -106,4 +107,14 @@
   width: var(--tens-brick-height);
   height: var(--tens-brick-height);
   background-color: var(--color-hundreds-brick);
+}
+
+.TensGroup .Gripper {
+  margin-top: 5px;
+  margin-bottom: -12px;
+}
+
+.UnitsGroup .Gripper {
+  margin-top: 5px;
+  margin-bottom: -5px;
 }
