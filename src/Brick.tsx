@@ -1,5 +1,4 @@
-import "./styles.css";
-import * as React from "react";
+import { useDraggable } from "./DragDrop/hooks/useDraggable";
 
 export interface BrickProps {
   hide?: boolean;
@@ -15,29 +14,17 @@ export function brickFactory(brickClass: string) {
     onBeginDrag,
     onEndDrag
   }: BrickProps) {
-    const [isDragging, setIsDragging] = React.useState(false);
-
-    const handleDragStart = React.useCallback(
-      (ev: React.DragEvent<HTMLDivElement>) => {
-        onBeginDrag?.();
-        requestAnimationFrame(() => setIsDragging(true));
-        ev.stopPropagation();
-      },
-      [onBeginDrag]
-    );
-
-    const handleDragEnd = React.useCallback(() => {
-      setIsDragging(false);
-      onEndDrag?.();
-    }, [onEndDrag]);
+    const { dragStyle, dragEvents } = useDraggable({
+      canDrag: !hide && !ghost,
+      onBeginDrag,
+      onEndDrag
+    });
 
     return (
       <div
         className={`${brickClass} ${hide ? "Hide" : ghost ? "Ghost" : " "}`}
-        style={{ visibility: isDragging ? "hidden" : undefined }}
-        draggable={!hide && !ghost}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
+        style={dragStyle}
+        {...dragEvents}
       />
     );
   }
