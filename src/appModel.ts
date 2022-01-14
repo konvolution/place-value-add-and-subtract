@@ -381,7 +381,8 @@ export function rootReducer(state: AppState, action: Action): AppState {
     case ActionType.CancelDrag: {
       return {
         ...state,
-        dragSource: undefined
+        dragSource: undefined,
+        dropTarget: undefined
       };
     }
 
@@ -452,7 +453,8 @@ export function rootReducer(state: AppState, action: Action): AppState {
         ...state,
         firstNumber: newFirstNumber,
         secondNumber: newSecondNumber,
-        dragSource: undefined
+        dragSource: undefined,
+        dropTarget: undefined
       };
     }
   }
