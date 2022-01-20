@@ -92,7 +92,12 @@ export class DragDropController
     }
   }
 
-  public leaveDrop(me: DropTarget) {}
+  public leaveDrop(me: DropTarget) {
+    if (this.currentDropTarget === me) {
+      me.deactivateDrop();
+      this.currentDropTarget = null;
+    }
+  }
   //#endregion DropController
 
   //#region PointerTracker
