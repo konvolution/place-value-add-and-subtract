@@ -485,7 +485,8 @@ export function generateInitialState(): AppState {
     question: generateRandomQuestion(),
     firstNumber: convertNumberToPicture(0),
     secondNumber: convertNumberToPicture(0),
-    dragSource: undefined
+    dragSource: undefined,
+    dropTarget: undefined
   };
 
   return rootReducer(dummyState, createActionNextQuestion(dummyState.question));
